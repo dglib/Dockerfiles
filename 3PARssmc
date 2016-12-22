@@ -1,0 +1,24 @@
+# Run the HPE 3PAR StoreServ Management Console in a container
+# docker pull 3parjunkie/ssmc
+# docker run -itd -p 443:8443 3parjunkie/ssmc --name ssmc
+
+FROM centos:6.7
+MAINTAINER 3PARJunkie <3parjunkie@gmail.com>
+
+RUN yum clean all && \ 
+yum -y update && \ 
+rm -fr /var/cache/*
+
+# The installer package must be imported into the image
+ADD linux/hpessmc-3.0.0.22054-x86_64.rpm /opt/
+
+RUN rpm -i /opt/hpessmc-3.0.0.22054-x86_64.rpm && \
+rm -rf /opt/hpessmc-3.0.0.22054-x86_64.rpm
+
+# The native port for this webapp is 8443 \
+# so we'll remap via the run (-p) command
+EXPOSE 8443
+
+# I need to clean this up
+ENTRYPOINT [ "/etc/init.d/ssmc, restart" ]
+#CMD /etc/init.d/ssmc restart && bash
