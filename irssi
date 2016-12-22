@@ -1,0 +1,10 @@
+# docker build -t dglib/irssi:latest .
+# docker run -ti --name irc dglib/irssi
+
+FROM ubuntu:latest
+MAINTAINER shaker242@gmail.com
+
+RUN apt-get update && apt-get install -y irssi --no-install-recommends \
+	&& rm -rf /var/lib/apt/lists/*
+
+ENTRYPOINT [ "irssi"]
