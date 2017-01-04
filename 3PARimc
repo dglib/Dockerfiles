@@ -1,9 +1,9 @@
 # Run the HPE 3PAR StoreServ Management Console in a container
 # docker pull 3parjunkie/imc
-# docker run -d --name imc -e DISPLAY==unix$DISPLAY \
+# docker run -d  -e DISPLAY==$DISPLAY \
 # -v /etc/localtime:/etc/localtime:ro \
 # -v /tmp/.X11-unix:/.X11-unix \
-# -name ssmc \
+# --name imc \
 # 3parjunkie/imc
 
 
