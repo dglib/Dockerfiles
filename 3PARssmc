@@ -1,24 +1,32 @@
 # Run the HPE 3PAR StoreServ Management Console in a container
 # docker pull 3parjunkie/ssmc
-# docker run -itd -p 443:8443 --name ssmc 3parjunkie/ssmc 
+# docker run -di -v /tmp/wrapper.ssmc.pid:/var/run/ \
+#     -v /tmp/wrapper.java.ssmc.pid:/var/run/ \
+#     -p 443:8443 --name ssmc 3parjunkie/ssmc
+
+# This is my docker file for deploying CentOS with SSH and the 3PAR CLI
+# 3PAR SSMC 
 
 FROM centos:6.7
-MAINTAINER 3PARJunkie <3parjunkie@gmail.com>
+MAINTAINER 3PARJUNKIE <3parjunkie@gmail.com>
 
 RUN yum clean all && \ 
 yum -y update && \ 
 rm -fr /var/cache/*
 
-# The installer package must be imported into the image
+# Install SSMC package
 ADD linux/hpessmc-3.0.0.22054-x86_64.rpm /opt/
-
 RUN rpm -i /opt/hpessmc-3.0.0.22054-x86_64.rpm && \
 rm -rf /opt/hpessmc-3.0.0.22054-x86_64.rpm
 
-# The native port for this webapp is 8443 \
-# so we'll remap via the run (-p) command
+# Portmap to local SSL port
 EXPOSE 8443
 
-# I need to clean this up
-ENTRYPOINT [ "/etc/init.d/ssmc, restart" ]
-#CMD /etc/init.d/ssmc restart && bash
+# HPE user
+USER hpe3parssmcuser
+
+# Manual Start
+CMD /opt/hpe/ssmc/yajsw/../jre/bin/java -Dwrapper.pidfile=/var/run/wrapper.ssmc.pid \
+    -Dwrapper.service=true -Dwrapper.visible=false -Djna_tmpdir=/opt/hpe/ssmc/yajsw/../ssmcbase/data/tmp \
+    -Dwrapper_home=/opt/hpe/ssmc/yajsw -jar /opt/hpe/ssmc/yajsw/wrapper.jar \
+    -tx /opt/hpe/ssmc/yajsw/conf/wrapperLinux.conf && sh
