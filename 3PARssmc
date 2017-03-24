@@ -1,8 +1,6 @@
 # Run the HPE 3PAR StoreServ Management Console in a container
 # docker pull 3parjunkie/ssmc
-# docker run -di -v /tmp/wrapper.ssmc.pid:/var/run/ \
-#     -v /tmp/wrapper.java.ssmc.pid:/var/run/ \
-#     -p 443:8443 --name ssmc 3parjunkie/ssmc
+# docker run -di -p 443:8443 --name ssmc 3parjunkie/ssmc
 
 # This is my docker file for deploying CentOS with SSH and the 3PAR CLI
 # 3PAR SSMC 
