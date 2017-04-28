@@ -1,3 +1,5 @@
+# This is no longer maintained, the updated SSMC 3.1 is posted to the Docker HUB via 3PARJunkie
+#
 # Run the HPE 3PAR StoreServ Management Console in a container
 # docker pull 3parjunkie/ssmc
 # docker run -di -p 443:8443 --name ssmc 3parjunkie/ssmc
